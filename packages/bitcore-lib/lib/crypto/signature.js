@@ -6,7 +6,7 @@ var $ = require('../util/preconditions');
 var BufferUtil = require('../util/buffer');
 var JSUtil = require('../util/js');
 
-var Signature = function Signature(r, s) {
+function Signature(r, s) {
   if (!(this instanceof Signature)) {
     return new Signature(r, s);
   }

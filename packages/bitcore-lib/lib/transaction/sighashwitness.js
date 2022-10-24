@@ -25,7 +25,7 @@ var _ = require('lodash');
  * @param {Buffer} scriptCode
  * @param {Buffer} satoshisBuffer
  */
-var sighash = function sighash(transaction, sighashType, inputNumber, scriptCode, satoshisBuffer) {
+function sighash(transaction, sighashType, inputNumber, scriptCode, satoshisBuffer) {
   /* jshint maxstatements: 50 */
 
   var hashPrevouts;

@@ -6,7 +6,7 @@ var buffer = require('buffer');
 
 var ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.split('');
 
-var Base58 = function Base58(obj) {
+function Base58(obj) {
   /* jshint maxcomplexity: 8 */
   if (!(this instanceof Base58)) {
     return new Base58(obj);

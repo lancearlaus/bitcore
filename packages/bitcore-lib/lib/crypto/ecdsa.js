@@ -10,7 +10,7 @@ var BufferUtil = require('../util/buffer');
 var _ = require('lodash');
 var $ = require('../util/preconditions');
 
-var ECDSA = function ECDSA(obj) {
+function ECDSA(obj) {
   if (!(this instanceof ECDSA)) {
     return new ECDSA(obj);
   }

@@ -20,7 +20,7 @@ var ecPointFromX = ec.curve.pointFromX.bind(ec.curve);
  * @returns {Point} An instance of Point
  * @constructor
  */
-var Point = function Point(x, y, isRed) {
+function Point(x, y, isRed) {
   try {
     var point = ecPoint(x, y, isRed);
   } catch (e) {

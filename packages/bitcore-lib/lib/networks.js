@@ -6,14 +6,23 @@ var JSUtil = require('./util/js');
 var networks = [];
 var networkMaps = {};
 
+/** @namespace */
+var Networks = {};
+
 /**
  * A network is merely a map containing values that correspond to version
  * numbers for each bitcoin network. Currently only supporting "livenet"
  * (a.k.a. "mainnet") and "testnet".
+ * @memberof Networks
  * @constructor
  */
 function Network() {}
 
+/**
+ * @instance
+ * @memberof Networks.Network
+ * @returns string
+ */
 Network.prototype.toString = function toString() {
   return this.name;
 };
@@ -23,7 +32,7 @@ Network.prototype.toString = function toString() {
  * @member Networks#get
  * Retrieves the network associated with a magic number or string.
  * @param {string|number|Network} arg
- * @param {string|Array} keys - if set, only check if the magic number associated with this name matches
+ * @param {string|Array=} keys - if set, only check if the magic number associated with this name matches
  * @return Network
  */
 function get(arg, keys) {
@@ -34,7 +43,7 @@ function get(arg, keys) {
     if (!_.isArray(keys)) {
       keys = [keys];
     }
-    var containsArg = function(key) {
+    function containsArg(key) {
       return networks[index][key] === arg;
     };
     for (var index in networks) {
@@ -238,10 +247,8 @@ function disableRegtest() {
   testnet.regtestEnabled = false;
 }
 
-/**
- * @namespace Networks
- */
-module.exports = {
+Networks = {
+  Network: Network,
   add: addNetwork,
   remove: removeNetwork,
   defaultNetwork: livenet,
@@ -253,3 +260,5 @@ module.exports = {
   enableRegtest: enableRegtest,
   disableRegtest: disableRegtest
 };
+
+module.exports = Networks;

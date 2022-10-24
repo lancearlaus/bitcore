@@ -54,7 +54,7 @@ function Unit(amount, code) {
   this._value = this._from(amount, code);
 
   var self = this;
-  var defineAccesor = function(key) {
+  function defineAccesor(key) {
     Object.defineProperty(self, key, {
       get: function() { return self.to(key); },
       enumerable: true,

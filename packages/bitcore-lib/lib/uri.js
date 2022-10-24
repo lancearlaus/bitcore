@@ -32,7 +32,7 @@ var Unit = require('./unit');
  * @returns {URI} A new valid and frozen instance of URI
  * @constructor
  */
-var URI = function(data, knownParams) {
+function URI(data, knownParams) {
   if (!(this instanceof URI)) {
     return new URI(data, knownParams);
   }

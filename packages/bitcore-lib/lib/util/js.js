@@ -9,7 +9,7 @@ var _ = require('lodash');
  * @param {string} value
  * @return {boolean} true if the string is the hexa representation of a number
  */
-var isHexa = function isHexa(value) {
+function isHexa(value) {
   if (!_.isString(value)) {
     return false;
   }

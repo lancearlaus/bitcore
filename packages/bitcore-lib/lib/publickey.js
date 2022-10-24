@@ -4,7 +4,7 @@ var BN = require('./crypto/bn');
 var Point = require('./crypto/point');
 var Hash = require('./crypto/hash');
 var JSUtil = require('./util/js');
-var Network = require('./networks');
+var Networks = require('./networks');
 var _ = require('lodash');
 var $ = require('./util/preconditions');
 
@@ -55,7 +55,7 @@ function PublicKey(data, extra) {
   JSUtil.defineImmutable(this, {
     point: info.point,
     compressed: info.compressed,
-    network: info.network || Network.defaultNetwork
+    network: info.network || Networks.defaultNetwork
   });
 
   return this;
@@ -87,7 +87,7 @@ PublicKey.prototype._classifyArgs = function(data, extra) {
     throw new TypeError('First argument is an unrecognized data format.');
   }
   if (!info.network) {
-    info.network = _.isUndefined(extra.network) ? undefined : Network.get(extra.network);
+    info.network = _.isUndefined(extra.network) ? undefined : Networks.get(extra.network);
   }
   return info;
 };

@@ -24,7 +24,7 @@ var JSUtil = require('../util/js');
  * @constructor
  * @param {Object|string|Buffer=} from optional data to populate script
  */
-var Script = function Script(from) {
+function Script(from) {
   if (!(this instanceof Script)) {
     return new Script(from);
   }

@@ -4,7 +4,7 @@ var BufferWriter = require('./bufferwriter');
 var BufferReader = require('./bufferreader');
 var BN = require('../crypto/bn');
 
-var Varint = function Varint(buf) {
+function Varint(buf) {
   if (!(this instanceof Varint))
     return new Varint(buf);
   if (Buffer.isBuffer(buf)) {

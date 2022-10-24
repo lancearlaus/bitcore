@@ -19,7 +19,7 @@ var PublicKey = require('../publickey');
  * The primary way to use this class is via the verify function.
  * e.g., Interpreter().verify( ... );
  */
-var Interpreter = function Interpreter(obj) {
+function Interpreter(obj) {
   if (!(this instanceof Interpreter)) {
     return new Interpreter(obj);
   }
@@ -606,7 +606,7 @@ Interpreter.prototype.checkLockTime = function(nLockTime) {
  * Checks a sequence parameter with the transaction's sequence.
  * @param {BN} nSequence the sequence read from the script
  * @return {boolean} true if the transaction's sequence is less than or equal to
- *                   the transaction's sequence 
+ *                   the transaction's sequence
  */
 Interpreter.prototype.checkSequence = function(nSequence) {
 
@@ -643,7 +643,7 @@ Interpreter.prototype.checkSequence = function(nSequence) {
     // of nSequenceMasked being tested is the same as the nSequenceMasked in the
     // transaction.
     var SEQUENCE_LOCKTIME_TYPE_FLAG_BN = new BN(Interpreter.SEQUENCE_LOCKTIME_TYPE_FLAG);
-    
+
     if (!((txToSequenceMasked.lt(SEQUENCE_LOCKTIME_TYPE_FLAG_BN)  &&
            nSequenceMasked.lt(SEQUENCE_LOCKTIME_TYPE_FLAG_BN)) ||
           (txToSequenceMasked.gte(SEQUENCE_LOCKTIME_TYPE_FLAG_BN) &&
@@ -659,7 +659,7 @@ Interpreter.prototype.checkSequence = function(nSequence) {
     return true;
   }
 
-/** 
+/**
  * Based on the inner loop of bitcoind's EvalScript function
  * bitcoind commit: b5d1b1092998bc95313856d535c632ea5a8f9104
  */

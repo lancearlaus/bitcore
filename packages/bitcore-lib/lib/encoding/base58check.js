@@ -5,7 +5,7 @@ var Base58 = require('./base58');
 var buffer = require('buffer');
 var sha256sha256 = require('../crypto/hash').sha256sha256;
 
-var Base58Check = function Base58Check(obj) {
+function Base58Check(obj) {
   if (!(this instanceof Base58Check))
     return new Base58Check(obj);
   if (Buffer.isBuffer(obj)) {

@@ -4,11 +4,13 @@
   "description": "A pure and powerful JavaScript Bitcoin library.",
   "author": "BitPay <dev@bitpay.com>",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "gulp test",
     "test:ci": "npm run test",
     "coverage": "gulp coverage",
     "build": "gulp",
+    "types": "tsc",
     "pub": "npm run build && npm publish"
   },
   "keywords": [
@@ -49,7 +51,8 @@
     "brfs": "^2.0.1",
     "chai": "^4.2.0",
     "gulp": "^4.0.0",
-    "sinon": "^7.1.1"
+    "sinon": "^7.1.1",
+    "typescript": "^4.8.4"
   },
   "license": "MIT",
   "gitHead": "012cc0216a9bc6b195035855bd17149bad41acd1"

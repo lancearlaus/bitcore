@@ -5,7 +5,7 @@ var $ = require('../util/preconditions');
 var BufferUtil = require('../util/buffer');
 var BN = require('../crypto/bn');
 
-var BufferReader = function BufferReader(buf) {
+function BufferReader(buf) {
   if (!(this instanceof BufferReader)) {
     return new BufferReader(buf);
   }

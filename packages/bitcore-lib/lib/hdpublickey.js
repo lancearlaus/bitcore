@@ -8,7 +8,7 @@ var Base58 = require('./encoding/base58');
 var Base58Check = require('./encoding/base58check');
 var Hash = require('./crypto/hash');
 var HDPrivateKey = require('./hdprivatekey');
-var Network = require('./networks');
+var Networks = require('./networks');
 var Point = require('./crypto/point');
 var PublicKey = require('./publickey');
 
@@ -203,7 +203,7 @@ HDPublicKey.prototype._deriveFromString = function(path) {
  * is valid.
  *
  * @param {string|Buffer} data - the serialized public key
- * @param {string|Network=} network - optional, if present, checks that the
+ * @param {string|Networks.Network=} network - optional, if present, checks that the
  *     network provided matches the network serialized.
  * @return {boolean}
  */
@@ -216,7 +216,7 @@ HDPublicKey.isValidSerialized = function(data, network) {
  * in base58 with checksum to fail.
  *
  * @param {string|Buffer} data - the serialized public key
- * @param {string|Network=} network - optional, if present, checks that the
+ * @param {string|Networks.Network=} network - optional, if present, checks that the
  *     network provided matches the network serialized.
  * @return {errors|null}
  */
@@ -244,14 +244,14 @@ HDPublicKey.getSerializedError = function(data, network) {
     }
   }
   var version = BufferUtil.integerFromBuffer(data.slice(0, 4));
-  if (version === Network.livenet.xprivkey || version === Network.testnet.xprivkey ) {
+  if (version === Networks.livenet.xprivkey || version === Networks.testnet.xprivkey ) {
     return new hdErrors.ArgumentIsPrivateExtended();
   }
   return null;
 };
 
 HDPublicKey._validateNetwork = function(data, networkArg) {
-  var network = Network.get(networkArg);
+  var network = Networks.get(networkArg);
   if (!network) {
     return new errors.InvalidNetworkArgument(networkArg);
   }
@@ -266,7 +266,7 @@ HDPublicKey.prototype._buildFromPrivate = function (arg) {
   var args = _.clone(arg._buffers);
   var point = Point.getG().mul(BN.fromBuffer(args.privateKey));
   args.publicKey = Point.pointToCompressed(point);
-  args.version = BufferUtil.integerAsBuffer(Network.get(BufferUtil.integerFromBuffer(args.version)).xpubkey);
+  args.version = BufferUtil.integerAsBuffer(Networks.get(BufferUtil.integerFromBuffer(args.version)).xpubkey);
   args.privateKey = undefined;
   args.checksum = undefined;
   args.xprivkey = undefined;
@@ -277,7 +277,7 @@ HDPublicKey.prototype._buildFromObject = function(arg) {
   /* jshint maxcomplexity: 10 */
   // TODO: Type validation
   var buffers = {
-    version: arg.network ? BufferUtil.integerAsBuffer(Network.get(arg.network).xpubkey) : arg.version,
+    version: arg.network ? BufferUtil.integerAsBuffer(Networks.get(arg.network).xpubkey) : arg.version,
     depth: _.isNumber(arg.depth) ? BufferUtil.integerAsSingleByteBuffer(arg.depth) : arg.depth,
     parentFingerPrint: _.isNumber(arg.parentFingerPrint) ? BufferUtil.integerAsBuffer(arg.parentFingerPrint) : arg.parentFingerPrint,
     childIndex: _.isNumber(arg.childIndex) ? BufferUtil.integerAsBuffer(arg.childIndex) : arg.childIndex,
@@ -344,7 +344,7 @@ HDPublicKey.prototype._buildFromBuffers = function(arg) {
       throw new errors.InvalidB58Checksum(concat, checksum);
     }
   }
-  var network = Network.get(BufferUtil.integerFromBuffer(arg.version));
+  var network = Networks.get(BufferUtil.integerFromBuffer(arg.version));
 
   var xpubkey;
   xpubkey = Base58Check.encode(BufferUtil.concat(sequence));
@@ -366,7 +366,7 @@ HDPublicKey.prototype._buildFromBuffers = function(arg) {
 };
 
 HDPublicKey._validateBufferArguments = function(arg) {
-  var checkBuffer = function(name, size) {
+  function checkBuffer(name, size) {
     var buff = arg[name];
     assert(BufferUtil.isBuffer(buff), name + ' argument is not a buffer, it\'s ' + typeof buff);
     assert(
@@ -430,7 +430,7 @@ HDPublicKey.prototype.inspect = function() {
  */
 HDPublicKey.prototype.toObject = HDPublicKey.prototype.toJSON = function toObject() {
   return {
-    network: Network.get(BufferUtil.integerFromBuffer(this._buffers.version)).name,
+    network: Networks.get(BufferUtil.integerFromBuffer(this._buffers.version)).name,
     depth: BufferUtil.integerFromSingleByteBuffer(this._buffers.depth),
     fingerPrint: BufferUtil.integerFromBuffer(this.fingerPrint),
     parentFingerPrint: BufferUtil.integerFromBuffer(this._buffers.parentFingerPrint),

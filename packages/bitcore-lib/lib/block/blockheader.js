@@ -19,7 +19,7 @@ var GENESIS_BITS = 0x1d00ffff;
  * @returns {BlockHeader} - An instance of block header
  * @constructor
  */
-var BlockHeader = function BlockHeader(arg) {
+function BlockHeader(arg) {
   if (!(this instanceof BlockHeader)) {
     return new BlockHeader(arg);
   }

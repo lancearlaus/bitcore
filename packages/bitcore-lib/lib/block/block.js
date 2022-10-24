@@ -33,6 +33,7 @@ Block.MAX_BLOCK_SIZE = 1000000;
  * @param {*} - A Buffer, JSON string or Object
  * @returns {Object} - An object representing block data
  * @throws {TypeError} - If the argument was not recognized
+ * @static
  * @private
  */
 Block._from = function _from(arg) {
@@ -50,6 +51,7 @@ Block._from = function _from(arg) {
 /**
  * @param {Object} - A plain JavaScript object
  * @returns {Object} - An object representing block data
+ * @static
  * @private
  */
 Block._fromObject = function _fromObject(data) {

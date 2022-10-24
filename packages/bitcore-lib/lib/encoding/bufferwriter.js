@@ -3,7 +3,7 @@
 var bufferUtil = require('../util/buffer');
 var assert = require('assert');
 
-var BufferWriter = function BufferWriter(obj) {
+function BufferWriter(obj) {
   if (!(this instanceof BufferWriter))
     return new BufferWriter(obj);
   this.bufLen = 0;

@@ -22,7 +22,7 @@ var PublicKey = require('./publickey');
  * `Address.PayToScriptHash` (the string `'scripthash'`),
  * `Address.PayToWitnessPublicKeyHash` (the string `'witnesspubkeyhash'`),
  * or `Address.PayToWitnessScriptHash` (the string `'witnessscripthash'`).
- * The network is an instance of {@link Network}.
+ * The network is an instance of {@link Networks}.
  * You can quickly check whether an address is of a given kind by using the methods
  * `isPayToPublicKeyHash`, `isPayToScriptHash`, `isPayToWitnessPublicKeyHash`,
  * and `isPayToWitnessScriptHash`.
@@ -43,7 +43,7 @@ var PublicKey = require('./publickey');
  * ```
  *
  * @param {*} data - The encoded data in various formats
- * @param {Network|String|number=} network - The network: 'livenet' or 'testnet'
+ * @param {Networks.Network|string|number=} network - The network: 'livenet' or 'testnet'
  * @param {string=} type - The type of address: 'scripthash', 'pubkeyhash', witnessscripthash, 'witnesspubkeyhash', or 'taproot'
  * @param {string=} multisigType - The type of multisig: 'scripthash' or 'witnessscripthash'
  * @returns {Address} A new valid and frozen instance of an Address
@@ -99,7 +99,7 @@ function Address(data, network, type, multisigType) {
 /**
  * Internal function used to split different kinds of arguments of the constructor
  * @param {*} data - The encoded data in various formats
- * @param {Network|String|number=} network - The network: 'livenet' or 'testnet'
+ * @param {Networks.Network|string|number=} network - The network: 'livenet' or 'testnet'
  * @param {string=} type - The type of address: 'script' or 'pubkey'
  * @returns {Object} An "info" object with "type", "network", and "hashBuffer"
  */
@@ -323,7 +323,7 @@ Address._transformScript = function(script, network) {
  *
  * @param {Array} publicKeys - a set of public keys to create an address
  * @param {number} threshold - the number of signatures needed to release the funds
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {boolean=} nestedWitness - if the address uses a nested p2sh witness
  * @param {string} type - Either 'scripthash' or 'witnessscripthash'. If nestedWitness is set, then this is ignored
  * @return {Address}
@@ -352,7 +352,7 @@ Address.createMultisig = function(publicKeys, threshold, network, nestedWitness,
  * Internal function to transform a bitcoin address string
  *
  * @param {string} data
- * @param {String|Network=} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network=} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string=} type - The type: 'pubkeyhash', 'scripthash', 'witnesspubkeyhash', or 'witnessscripthash'
  * @returns {Object} An object with keys: hashBuffer, network and type
  * @private
@@ -390,7 +390,7 @@ Address._transformString = function(data, network, type) {
  * Instantiate an address from a PublicKey instance
  *
  * @param {PublicKey} data
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string} type - Either 'pubkeyhash', 'witnesspubkeyhash', or 'scripthash'
  * @returns {Address} A new valid and frozen instance of an Address
  */
@@ -404,7 +404,7 @@ Address.fromPublicKey = function(data, network, type) {
  * Instantiate an address from a ripemd160 public key hash
  *
  * @param {Buffer} hash - An instance of buffer of the hash
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @returns {Address} A new valid and frozen instance of an Address
  */
 Address.fromPublicKeyHash = function(hash, network) {
@@ -416,7 +416,7 @@ Address.fromPublicKeyHash = function(hash, network) {
  * Instantiate an address from a ripemd160 script hash
  *
  * @param {Buffer} hash - An instance of buffer of the hash
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string} type - Either 'scripthash' or 'witnessscripthash'
  * @returns {Address} A new valid and frozen instance of an Address
  */
@@ -437,7 +437,7 @@ Address.fromScriptHash = function(hash, network, type) {
  * see {{Address#fromScript}}
  *
  * @param {Script} script - An instance of Script
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string} type - Either 'scripthash' or 'witnessscripthash'
  * @returns {Address} A new valid and frozen instance of an Address
  */
@@ -463,7 +463,7 @@ Address.payingTo = function(script, network, type) {
  * to that script's hash instead, use {{Address#payingTo}}
  *
  * @param {Script} script - An instance of Script
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @returns {Address} A new valid and frozen instance of an Address
  */
 Address.fromScript = function(script, network) {
@@ -476,7 +476,7 @@ Address.fromScript = function(script, network) {
  * Instantiate an address from a buffer of the address
  *
  * @param {Buffer} buffer - An instance of buffer of the address
- * @param {String|Network=} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network=} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string=} type - The type of address: 'script' or 'pubkey'
  * @returns {Address} A new valid and frozen instance of an Address
  */
@@ -489,7 +489,7 @@ Address.fromBuffer = function(buffer, network, type) {
  * Instantiate an address from an address string
  *
  * @param {string} str - An string of the bitcoin address
- * @param {String|Network=} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network=} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string=} type - The type of address: 'script' or 'pubkey'
  * @returns {Address} A new valid and frozen instance of an Address
  */
@@ -523,7 +523,7 @@ Address.fromObject = function fromObject(obj) {
  * ```
  *
  * @param {string} data - The encoded data
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string} type - The type of address: 'script' or 'pubkey'
  * @returns {null|Error} The corresponding error message
  */
@@ -547,7 +547,7 @@ Address.getValidationError = function(data, network, type) {
  * ```
  *
  * @param {string} data - The encoded data
- * @param {String|Network} network - either a Network instance, 'livenet', or 'testnet'
+ * @param {string|Networks.Network} network - either a Network instance, 'livenet', or 'testnet'
  * @param {string} type - The type of address: 'script' or 'pubkey'
  * @returns {boolean} The corresponding error message
  */

@@ -10,7 +10,7 @@ var BN = require('./crypto/bn');
 var Base58 = require('./encoding/base58');
 var Base58Check = require('./encoding/base58check');
 var Hash = require('./crypto/hash');
-var Network = require('./networks');
+var Networks = require('./networks');
 var Point = require('./crypto/point');
 var PrivateKey = require('./privatekey');
 var Random = require('./crypto/random');
@@ -45,7 +45,7 @@ function HDPrivateKey(arg) {
     return this._generateRandomly();
   }
 
-  if (Network.get(arg)) {
+  if (Networks.get(arg)) {
     return this._generateRandomly(arg);
   } else if (_.isString(arg) || BufferUtil.isBuffer(arg)) {
     if (HDPrivateKey.isValidSerialized(arg)) {
@@ -336,7 +336,7 @@ HDPrivateKey.getSerializedError = function(data, network) {
 };
 
 HDPrivateKey._validateNetwork = function(data, networkArg) {
-  var network = Network.get(networkArg);
+  var network = Networks.get(networkArg);
   if (!network) {
     return new errors.InvalidNetworkArgument(networkArg);
   }
@@ -365,7 +365,7 @@ HDPrivateKey.prototype._buildFromObject = function(arg) {
   /* jshint maxcomplexity: 12 */
   // TODO: Type validation
   var buffers = {
-    version: arg.network ? BufferUtil.integerAsBuffer(Network.get(arg.network).xprivkey) : arg.version,
+    version: arg.network ? BufferUtil.integerAsBuffer(Networks.get(arg.network).xprivkey) : arg.version,
     depth: _.isNumber(arg.depth) ? BufferUtil.integerAsSingleByteBuffer(arg.depth) : arg.depth,
     parentFingerPrint: _.isNumber(arg.parentFingerPrint) ? BufferUtil.integerAsBuffer(arg.parentFingerPrint) : arg.parentFingerPrint,
     childIndex: _.isNumber(arg.childIndex) ? BufferUtil.integerAsBuffer(arg.childIndex) : arg.childIndex,
@@ -420,7 +420,7 @@ HDPrivateKey.fromSeed = function(hexa, network) {
   var hash = Hash.sha512hmac(hexa, Buffer.from('Bitcoin seed'));
 
   return new HDPrivateKey({
-    network: Network.get(network) || Network.defaultNetwork,
+    network: Networks.get(network) || Networks.defaultNetwork,
     depth: 0,
     parentFingerPrint: 0,
     childIndex: 0,
@@ -477,7 +477,7 @@ HDPrivateKey.prototype._buildFromBuffers = function(arg) {
     }
   }
 
-  var network = Network.get(BufferUtil.integerFromBuffer(arg.version));
+  var network = Networks.get(BufferUtil.integerFromBuffer(arg.version));
   var xprivkey;
   xprivkey = Base58Check.encode(buffer.Buffer.concat(sequence));
   arg.xprivkey = Buffer.from(xprivkey);
@@ -518,7 +518,7 @@ HDPrivateKey.prototype._buildFromBuffers = function(arg) {
 };
 
 HDPrivateKey._validateBufferArguments = function(arg) {
-  var checkBuffer = function(name, size) {
+  function checkBuffer(name, size) {
     var buff = arg[name];
     assert(BufferUtil.isBuffer(buff), name + ' argument is not a buffer');
     assert(
@@ -576,7 +576,7 @@ HDPrivateKey.prototype.inspect = function() {
  */
 HDPrivateKey.prototype.toObject = HDPrivateKey.prototype.toJSON = function toObject() {
   return {
-    network: Network.get(BufferUtil.integerFromBuffer(this._buffers.version), 'xprivkey').name,
+    network: Networks.get(BufferUtil.integerFromBuffer(this._buffers.version), 'xprivkey').name,
     depth: BufferUtil.integerFromSingleByteBuffer(this._buffers.depth),
     fingerPrint: BufferUtil.integerFromBuffer(this.fingerPrint),
     parentFingerPrint: BufferUtil.integerFromBuffer(this._buffers.parentFingerPrint),

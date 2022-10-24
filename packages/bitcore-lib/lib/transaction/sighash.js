@@ -25,7 +25,7 @@ var BITS_64_ON = 'ffffffffffffffff';
  * @param {number} inputNumber the input index for the signature
  * @param {Script} subscript the script that will be signed
  */
-var sighash = function sighash(transaction, sighashType, inputNumber, subscript) {
+function sighash(transaction, sighashType, inputNumber, subscript) {
   var Transaction = require('./transaction');
   var Input = require('./input');
 
@@ -104,7 +104,7 @@ function sign(transaction, privateKey, sighashType, inputIndex, subscript, signi
   signingMethod = signingMethod || 'ecdsa';
 
   let hashbuf = sighash(transaction, sighashType, inputIndex, subscript);
-  let sig; 
+  let sig;
   switch (signingMethod) {
     case 'ecdsa':
       sig = ECDSA.sign(hashbuf, privateKey, 'little').set({ nhashtype: sighashType });
@@ -112,7 +112,7 @@ function sign(transaction, privateKey, sighashType, inputIndex, subscript, signi
     case 'schnorr':
       sig = schnorr.sign(privateKey.toString(), hashbuf);
       break;
-    default: 
+    default:
       throw new Error("signingMethod not supported ", signingMethod);
   }
   return sig;

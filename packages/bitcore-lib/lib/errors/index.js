@@ -8,8 +8,22 @@ function format(message, args) {
     .replace('{1}', args[1])
     .replace('{2}', args[2]);
 }
-var traverseNode = function(parent, errorDefinition) {
-  var NodeError = function() {
+
+/**
+ * @typedef {Error} NodeError
+ */
+
+/**
+ * @template {Error|NodeError} Parent
+ * @param {new Parent} parent - parent error type
+ * @param {*} errorDefinition - error specification
+ * @returns {new NodeError}
+ */
+function traverseNode(parent, errorDefinition) {
+  /**
+   * @constructor
+   */
+  function NodeError() {
     if (_.isString(errorDefinition.message)) {
       this.message = format(errorDefinition.message, arguments);
     } else if (_.isFunction(errorDefinition.message)) {
@@ -17,7 +31,7 @@ var traverseNode = function(parent, errorDefinition) {
     } else {
       throw new Error('Invalid error definition for ' + errorDefinition.name);
     }
-    this.stack = this.message + '\n' + (new Error()).stack;
+    this.stack = this.message + '\n' + (new global.Error()).stack;
   };
   NodeError.prototype = Object.create(parent.prototype);
   NodeError.prototype.name = parent.prototype.name + errorDefinition.name;
@@ -29,33 +43,40 @@ var traverseNode = function(parent, errorDefinition) {
 };
 
 /* jshint latedef: false */
-var childDefinitions = function(parent, childDefinitions) {
+function childDefinitions(parent, childDefinitions) {
   _.each(childDefinitions, function(childDefinition) {
     traverseNode(parent, childDefinition);
   });
 };
 /* jshint latedef: true */
 
-var traverseRoot = function(parent, errorsDefinition) {
+function traverseRoot(parent, errorsDefinition) {
   childDefinitions(parent, errorsDefinition);
   return parent;
 };
 
 
-var bitcore = {};
-bitcore.Error = function() {
+/**
+ * @constructor
+ */
+function Error() {
   this.message = 'Internal error';
-  this.stack = this.message + '\n' + (new Error()).stack;
+  this.stack = this.message + '\n' + (new global.Error()).stack;
 };
-bitcore.Error.prototype = Object.create(Error.prototype);
-bitcore.Error.prototype.name = 'bitcore.Error';
+Error.prototype = Object.create(global.Error.prototype);
+Error.prototype.name = 'bitcore.Error';
 
 
 var data = require('./spec');
-traverseRoot(bitcore.Error, data);
+traverseRoot(Error, data);
 
-module.exports = bitcore.Error;
-
-module.exports.extend = function(spec) {
-  return traverseNode(bitcore.Error, spec);
+/**
+ * @memberof Error
+ * @param {*} spec
+ * @returns Error
+ */
+Error.extend = function extend(spec) {
+  return traverseNode(Error, spec);
 };
+
+module.exports = Error;
